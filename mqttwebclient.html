@@ -615,8 +615,8 @@
 
             // called when a message arrives
             function onMessageArrived(message) {
-                var date = new Date();
-                $("#rcv").prepend(date.toUTCString() + " - " + "收到消息" + ":\n"
+                let timestamp = Date.now();
+                $("#rcv").prepend(timestampToTime(timestamp) + " - " + "收到消息" + ":\n"
                     + " [收到消息] | topic=" + message.destinationName + ", QoS=" + message.qos
                     + ", retained=" + message.retained + ", duplicate=" + message.duplicate
                     + ", payload=" + message.payloadString + "\n"
@@ -660,10 +660,21 @@
     $("#clientId").val(makeid());
 
     function logging(title, msg) {
-        var date = new Date();
-        $("#log").prepend(date.toUTCString() + " - " + title + ":\n"
+        let timestamp = Date.now();
+        $("#log").prepend(timestampToTime(timestamp) + " - " + title + ":\n"
             + msg + "\n"
             + "========\n");
+    }
+
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+       var Y = date.getFullYear() + '-';
+       var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+       var D = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate()) + ' ';
+       var h = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours()) + ':';
+       var m = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes()) + ':';
+       var s = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+        return Y+M+D+h+m+s;
     }
 </script>
 </html>
